@@ -1,29 +1,25 @@
-import {createSlice , configureStore} from '@reduxjs/toolkit'
-
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 const initialState = {
-    arrayOfProduct : [],
-    typeOfProduct : ""
-}
+  showLoginModal: false,
+};
 
 const arrayStoreFunction = createSlice({
-    name : 'arrayStore',
-    initialState,
-    reducers : {
-        storeDataFun : (state , action) => {
-            console.log(action.payload) 
-            state.arrayOfProduct = action.payload
-        }
-    }
-})
-
+  name: "arrayStore",
+  initialState,
+  reducers: {
+    loginCheckerFun: (state, action) => {
+      console.log(action.payload);
+      state.showLoginModal = action.payload;
+    },
+  },
+});
 
 const store = configureStore({
-    reducer : {
-        arrayStore : arrayStoreFunction.reducer
-    }
-})
+  reducer: {
+    arrayStore: arrayStoreFunction.reducer,
+  },
+});
 
-
-export const arrayReduxBtn = arrayStoreFunction.actions
+export const arrayReduxBtn = arrayStoreFunction.actions;
 export default store;

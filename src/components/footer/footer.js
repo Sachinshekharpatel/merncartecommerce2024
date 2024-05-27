@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
 const Footer = () => {
+  const emailRef = useRef();
+  const subscribeBtnHandler = (e) => {
+    e.preventDefault();
+    const email = emailRef.current.value;
+    if (email.length > 3 && email.includes("@")) {
+      alert("Subscribed successfully");
+    }
+
+    emailRef.current.value = "";
+  };
   return (
     <footer className="bg-gray-900 text-white py-12">
       <div className="max-w-6xl mx-auto px-4">
@@ -52,10 +62,12 @@ const Footer = () => {
             </ul>
           </div>
           <div className="w-full md:w-1/3">
-            <h2 className="text-2xl font-bold mb-4">Newsletter</h2>
-            <form className="mb-4">
+            <h2 className="text-2xl font-bold mb-4"></h2>
+            <form className="mb-4" onSubmit={subscribeBtnHandler}>
               <input
                 type="email"
+                ref={emailRef}
+                required
                 className="bg-gray-800 text-white w-full px-4 py-3 mb-3 rounded-sm focus:outline-none focus:ring focus:border-blue-300"
                 placeholder="Enter your email"
               />
@@ -74,6 +86,7 @@ const Footer = () => {
           <p className="text-sm">
             &copy; 2024 Mern Cart Inc. All rights reserved.
           </p>
+          <p className="text-sm">&copy; Developed By Sachin Shekhar Patel.</p>
         </div>
       </div>
     </footer>
