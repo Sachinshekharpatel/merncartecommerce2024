@@ -10,20 +10,21 @@ const WomenStore = () => {
   const navigate = useNavigate();
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [womenBgImg, womenBgImg2];
+  const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
+
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
-    .then((response) => response.json())
-    .then((data) => {
-      const WomenClothing = data.filter((product) => {
-        return product.category === "women's clothing";
-      });
+      .then((response) => response.json())
+      .then((data) => {
+        const WomenClothing = data.filter((product) => {
+          return product.category === "women's clothing";
+        });
 
-      setDataToDisplay(WomenClothing);
-     
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+        setDataToDisplay(WomenClothing);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
 
     const interval = setInterval(() => {
       setCurrentBgImg((prevImg) =>
@@ -60,7 +61,7 @@ const WomenStore = () => {
       <Header />
 
       <div
-        className="bg-cover bg-center h-40 flex items-center justify-center transition-all duration-1000"
+         className="bg-cover bg-center h-40 flex  transition-all duration-1000"
         style={{ backgroundImage: `url(${currentBgImg})`, color: "grey" }}
       >
         <button
@@ -85,7 +86,7 @@ const WomenStore = () => {
       <div className="store-container">
         <div className="filter-container">
           <h2 className="filter-title mb-4 mt-4">Filters</h2>
-         
+
           <div className="flex flex-col space-y-4">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

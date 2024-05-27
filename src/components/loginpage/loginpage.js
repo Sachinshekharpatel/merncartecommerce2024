@@ -26,7 +26,7 @@ const LoginPage = () => {
       if (response.status === 200) {
         console.log("Login successful");
         navigate("/");
-        localStorage.setItem("tokenMernCartidToken", JSON.stringify(response.data.idToken));
+        localStorage.setItem("tokenMernCart", JSON.stringify(response.data.idToken));
         localStorage.setItem("emailMernCart", JSON.stringify(response.data.email));
       }
     } catch (error) {

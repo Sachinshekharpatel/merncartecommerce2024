@@ -11,6 +11,8 @@ const JeweleryStore = () => {
   const navigate = useNavigate();
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [menBgImg, womenBgImg2];
+  const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
+
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((response) => response.json())

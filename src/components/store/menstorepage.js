@@ -11,7 +11,8 @@ const MenStorePage = () => {
   const navigate = useNavigate();
   const [currentBgImg, setCurrentBgImg] = useState(menBgImg);
   const images = [menBgImg2, menBgImg];
-
+  const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
+ 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products/category/men's clothing")
       .then((response) => response.json())
@@ -57,13 +58,10 @@ const MenStorePage = () => {
       <Header />
 
       <div
-        className="bg-cover bg-center h-40 flex items-center justify-center transition-all duration-1000"
+         className="bg-cover bg-center h-40 flex  transition-all duration-1000"
         style={{ backgroundImage: `url(${currentBgImg})`, color: "grey" }}
       >
-        <button
-          onClick={() => navigate("/")}
-          className="text-grey mb-36 mx-1"
-        >
+        <button onClick={() => navigate("/")} className="text-grey mb-36 mx-1">
           Home |{" "}
         </button>
         <button
@@ -112,7 +110,7 @@ const MenStorePage = () => {
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p className="price">${item.price}</p>
-              <button className="CartBtn">
+              <button   className="CartBtn">
                 <span className="IconContainer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
