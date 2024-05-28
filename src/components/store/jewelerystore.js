@@ -20,6 +20,10 @@ const JeweleryStore = () => {
   const cartItemarray = useSelector(
     (state) => state.arrayStore.totalCartItemUser
   );
+  const showModalLogin = useSelector(
+    (state) => state.arrayStore.showLoginModal
+  );
+  const [itemAddedToCart, setItemAddedToCart] = useState(false);
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((response) => response.json())
@@ -41,6 +45,17 @@ const JeweleryStore = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    console.log(showModalLogin);
+    console.log(userEmail);
+    if (showModalLogin) {
+      const interval = setInterval(() => {
+        dispatch(arrayReduxBtn.loginCheckerFun(false));
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [showModalLogin]);
   const sortLowToHigh = () => {
     const sortedData = [...dataToDisplay].sort((a, b) => a.price - b.price);
     setDataToDisplay(sortedData);
@@ -90,8 +105,11 @@ const JeweleryStore = () => {
               )
               .then((res) => {
                 const data = [...cartItemarray, res.data];
-                console.log(data);
+                setItemAddedToCart(true);
                 dispatch(arrayReduxBtn.totalCartItemFunction(data));
+                setTimeout(() => {
+                  setItemAddedToCart(false);
+                }, 2000);
               })
               .catch((err) => {
                 console.log(err);
@@ -175,10 +193,26 @@ const JeweleryStore = () => {
                 </span>
                 <p className="text">Add to Cart</p>
               </button>
+             
             </div>
           ))}
         </div>
       </div>
+      {itemAddedToCart && (
+        <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+            Item Added To Cart
+          </button>
+        </div>
+      )}
+      
+      {showModalLogin && (
+            <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
+              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+                Please Login
+              </button>
+            </div>
+          )}
       <Footer />
     </div>
   );

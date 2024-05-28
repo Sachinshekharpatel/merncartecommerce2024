@@ -26,8 +26,16 @@ const LoginPage = () => {
       if (response.status === 200) {
         console.log("Login successful");
         navigate("/");
-        localStorage.setItem("tokenMernCart", JSON.stringify(response.data.idToken));
-        localStorage.setItem("emailMernCart", JSON.stringify(response.data.email));
+        localStorage.setItem(
+          "tokenMernCart",
+          JSON.stringify(response.data.idToken)
+        );
+        localStorage.setItem(
+          "emailMernCart",
+          JSON.stringify(response.data.email)
+        );
+
+        window.location.reload();
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
@@ -41,11 +49,16 @@ const LoginPage = () => {
   return (
     <div className="loginpageparent min-h-screen">
       <Header />
-      <h2 className="text-center text-gray-600 text-3xl font-bold py-5">MernCart</h2>
+      <h2 className="text-center text-gray-600 text-3xl font-bold py-5">
+        MernCart
+      </h2>
       <div className="max-w-md mx-auto bg-white shadow-md rounded-md p-6">
         <form onSubmit={loginBtnHandler}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700"
+            >
               Email address
             </label>
             <input
@@ -58,7 +71,10 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
               Password
             </label>
             <input
@@ -79,7 +95,10 @@ const LoginPage = () => {
         </form>
         <div className="mt-3 text-center">
           <p>
-            Don't have an account? <Link to="/signuppage" className="text-indigo-600">Sign Up</Link>
+            Don't have an account?{" "}
+            <Link to="/signuppage" className="text-indigo-600">
+              Sign Up
+            </Link>
           </p>
         </div>
       </div>

@@ -15,14 +15,24 @@ const WomenStore = () => {
   const dispatch = useDispatch();
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [womenBgImg, womenBgImg2];
-  
+  const [itemAddedToCart, setItemAddedToCart] = useState(false);
   const cartItemarray = useSelector(
     (state) => state.arrayStore.totalCartItemUser
   );
   const userEmail = localStorage.getItem("emailMernCart") || null;
-
- 
-
+  const showModalLogin = useSelector(
+    (state) => state.arrayStore.showLoginModal
+  );
+  useEffect(() => {
+    console.log(showModalLogin);
+    console.log(userEmail);
+    if (showModalLogin) {
+      const interval = setInterval(() => {
+        dispatch(arrayReduxBtn.loginCheckerFun(false));
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [showModalLogin]);
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((response) => response.json())
@@ -96,7 +106,11 @@ const WomenStore = () => {
               .then((res) => {
                 const data = [...cartItemarray, res.data];
                 console.log(data);
+                setItemAddedToCart(true);
                 dispatch(arrayReduxBtn.totalCartItemFunction(data));
+                setTimeout(() => {
+                  setItemAddedToCart(false);
+                }, 2000);
               })
               .catch((err) => {
                 console.log(err);
@@ -187,6 +201,20 @@ const WomenStore = () => {
           ))}
         </div>
       </div>
+      {itemAddedToCart && (
+        <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+            Item Added To Cart
+          </button>
+        </div>
+      )}
+      {showModalLogin && (
+        <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+            Please Login
+          </button>
+        </div>
+      )}
       <Footer />
     </div>
   );

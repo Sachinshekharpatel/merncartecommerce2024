@@ -3,13 +3,15 @@ import logo from "./ecommercelogo.jpg";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { arrayReduxBtn } from "../../reduxstore/reduxstore";
+import { useDispatch, useSelector } from "react-redux";
 const Header = () => {
   const [showOptions, setShowOptions] = useState(false);
   const navigate = useNavigate();
   const [tokenMernCart, setTokenMernCart] = useState(null);
   const [totalCartItem, setTotalCartItem] = useState(0);
   const cartItemarray = useSelector((state) => state.arrayStore.totalCartItemUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (tokenMernCart === null) {
@@ -28,6 +30,7 @@ const Header = () => {
   const logoutBtnHandler = () => {
     localStorage.removeItem("tokenMernCart");
     localStorage.removeItem("emailMernCart");
+    dispatch(arrayReduxBtn.totalCartItemFunction([]));
     navigate("/loginpage");
   };
 
@@ -140,7 +143,7 @@ const Header = () => {
             </svg>
           </button>
 
-          <button className="button">
+          <button onClick={()=>{navigate("/cartpage")}} className="button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="1em"
@@ -179,7 +182,7 @@ const Header = () => {
             }}
             className="PleaseLoginbtn"
           >
-            Please Login
+             Login
           </button>
         )}
       </div>

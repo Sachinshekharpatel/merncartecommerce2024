@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 import { useDispatch } from "react-redux";
 import { arrayReduxBtn } from "./reduxstore/reduxstore";
 import AboutusPage from "./components/aboutuspage/aboutus";
@@ -14,12 +14,14 @@ import LoginPage from "./components/loginpage/loginpage";
 import SignupPage from "./components/signuppage/signuppage";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import CartPage from "./components/cartpage/cartpage";
 function App() {
   const dispatch = useDispatch();
   const emailMernCart = localStorage.getItem("emailMernCart");
   const cartItemarray = useSelector(
     (state) => state.arrayStore.totalCartItemUser
   );
+  
   useEffect(() => {
     axios
       .get(
@@ -42,6 +44,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Welcomepage></Welcomepage>}></Route>
           <Route path="/aboutus" element={<AboutusPage></AboutusPage>}></Route>
+          <Route path="/cartpage" element={<CartPage />}></Route>
           <Route
             path="/contactus"
             element={<ContactPage></ContactPage>}
