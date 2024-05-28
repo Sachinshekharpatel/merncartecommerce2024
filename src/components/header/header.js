@@ -2,17 +2,25 @@ import React, { useEffect, useState } from "react";
 import logo from "./ecommercelogo.jpg";
 import "./header.css";
 import { Link, useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { useSelector } from "react-redux";
 const Header = () => {
   const [showOptions, setShowOptions] = useState(false);
   const navigate = useNavigate();
   const [tokenMernCart, setTokenMernCart] = useState(null);
+  const [totalCartItem, setTotalCartItem] = useState(0);
+  const cartItemarray = useSelector((state) => state.arrayStore.totalCartItemUser);
+
+  useEffect(() => {
+    if (tokenMernCart === null) {
+      setTokenMernCart(localStorage.getItem("tokenMernCart"));
+    }
+  }, [tokenMernCart]);
   
   useEffect(() => {
-     if(tokenMernCart === null){
-      setTokenMernCart(localStorage.getItem("tokenMernCart"))
-     }
-  },[tokenMernCart])
+    console.log(cartItemarray,cartItemarray.length);
+    setTotalCartItem(cartItemarray.length);
+  },[cartItemarray])
   const toggleOptions = () => {
     setShowOptions(!showOptions);
   };
@@ -21,7 +29,7 @@ const Header = () => {
     localStorage.removeItem("tokenMernCart");
     localStorage.removeItem("emailMernCart");
     navigate("/loginpage");
-  };  
+  };
 
   const storeFunctionMenHandlerBtn = () => {
     navigate("/menstore");
@@ -83,7 +91,12 @@ const Header = () => {
         )}
       </div>
       <div className="flex items-center">
-        <img style={{ borderRadius: "50%" }} src={logo} alt="Logo" className="h-8 md:h-10 mr-2" />
+        <img
+          style={{ borderRadius: "50%" }}
+          src={logo}
+          alt="Logo"
+          className="h-8 md:h-10 mr-2"
+        />
         <h1 className="text-white text-lg md:text-xl font-bold">Mern Cart</h1>
       </div>
       <div className="flex items-center mt-4 md:mt-0 md:ml-4 flex-grow">
@@ -144,6 +157,7 @@ const Header = () => {
               <circle r="1" cy="21" cx="20"></circle>
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
+            {totalCartItem}
           </button>
         </div>
         {tokenMernCart !== null ? (
@@ -158,7 +172,16 @@ const Header = () => {
               <div className="text">Logout</div>
             </button>
           </div>
-        ):<button onClick={()=>{navigate("/loginpage")}} className="PleaseLoginbtn">Please Login</button>}
+        ) : (
+          <button
+            onClick={() => {
+              navigate("/loginpage");
+            }}
+            className="PleaseLoginbtn"
+          >
+            Please Login
+          </button>
+        )}
       </div>
     </header>
   );

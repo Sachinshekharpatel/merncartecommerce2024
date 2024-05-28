@@ -4,11 +4,13 @@ import Footer from "../footer/footer";
 import { useNavigate } from "react-router-dom";
 import womenBgImg from "./electronicbg1.webp";
 import womenBgImg2 from "./mentshirtsection.jpg";
+
 const Welcomepage = () => {
   const navigate = useNavigate();
-  const tokenMernKart = localStorage.getItem("tokenMernCart") || null;
+
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [womenBgImg, womenBgImg2];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentBgImg((prevImg) =>
@@ -56,7 +58,10 @@ const Welcomepage = () => {
           <span className="font-extrabold text-7xl -skew-x-12 -skew-y-12 -mt-1 mb-5">
             70%
           </span>
-          <button onClick={() => navigate("/menstore")} className="z-10 px-4 py-2 bg-sky-400 text-gray-50 hover:bg-sky-300 transition duration-300">
+          <button
+            onClick={() => navigate("/menstore")}
+            className="z-10 px-4 py-2 bg-sky-400 text-gray-50 hover:bg-sky-300 transition duration-300"
+          >
             Shop now
           </button>
           <p className="text-xs mb-1">*Variable prices</p>

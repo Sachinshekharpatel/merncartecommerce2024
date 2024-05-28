@@ -6,13 +6,20 @@ import "./menstorepage.css"; // Import the CSS file
 import menBgImg from "./mentshirtsection.jpg";
 import womenBgImg from "./womenpagebg.avif";
 import womenBgImg2 from "./womenbg2.avif";
+import axios from "axios";
+import { useDispatch ,useSelector } from "react-redux";
+import { arrayReduxBtn } from "../../reduxstore/reduxstore";
 const JeweleryStore = () => {
+  const dispatch = useDispatch();
+  const userEmail = localStorage.getItem("emailMernCart") || null;
   const [dataToDisplay, setDataToDisplay] = useState([]);
   const navigate = useNavigate();
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [menBgImg, womenBgImg2];
   const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
-
+  const cartItemarray = useSelector(
+    (state) => state.arrayStore.totalCartItemUser
+  );
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((response) => response.json())
@@ -53,6 +60,47 @@ const JeweleryStore = () => {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  };
+  const addToCartBtnhandler = (item) => {
+    let data = {
+      ...item,
+      quantity: 1,
+      email: userEmail,
+    };
+
+    if (userEmail === null) {
+      dispatch(arrayReduxBtn.loginCheckerFun(true));
+      return;
+    } else {
+      try {
+        axios
+          .post(
+            `https://sachinstepsdatabase-default-rtdb.firebaseio.com/merncartItems.json`,
+            data
+          )
+          .then((res) => {
+            data = {
+              ...data,
+              id: res.data.name,
+            };
+            axios
+              .put(
+                `https://sachinstepsdatabase-default-rtdb.firebaseio.com/merncartItems/${data.id}.json`,
+                data
+              )
+              .then((res) => {
+                const data = [...cartItemarray, res.data];
+                console.log(data);
+                dispatch(arrayReduxBtn.totalCartItemFunction(data));
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
   return (
     <div>
@@ -113,7 +161,7 @@ const JeweleryStore = () => {
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p>${item.price}</p>
-              <button className="CartBtn">
+              <button onClick={() => addToCartBtnhandler(item)} className="CartBtn">
                 <span className="IconContainer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

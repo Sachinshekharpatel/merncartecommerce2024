@@ -14,10 +14,12 @@ const MenStorePage = () => {
   const navigate = useNavigate();
   const [currentBgImg, setCurrentBgImg] = useState(menBgImg);
   const images = [menBgImg2, menBgImg];
-  const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
   const userEmail = localStorage.getItem("emailMernCart") || null;
   const showModalLogin = useSelector(
     (state) => state.arrayStore.showLoginModal
+  );
+  const cartItemarray = useSelector(
+    (state) => state.arrayStore.totalCartItemUser
   );
   const dispatch = useDispatch();
 
@@ -100,7 +102,9 @@ const MenStorePage = () => {
                 data
               )
               .then((res) => {
-                console.log(res);
+                const data = [...cartItemarray, res.data];
+                console.log(data);
+                dispatch(arrayReduxBtn.totalCartItemFunction(data));
               })
               .catch((err) => {
                 console.log(err);
@@ -115,14 +119,8 @@ const MenStorePage = () => {
   return (
     <div>
       <Header />
-      {showModalLogin && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <button className="bg-white p-4 rounded-md">
-            <p className="text-center text-red-500">Please login first</p>
-          </button>
-        </div>
-      )}
-      {!showModalLogin && (
+
+      {
         <>
           <div
             className="bg-cover bg-center h-40 flex  transition-all duration-1000"
@@ -195,7 +193,6 @@ const MenStorePage = () => {
                         <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.7 32.7L141.5 64H458.7c27.7 0 52.7 17.8 61.6 44.1L575.1 251c5.9 17.7 2.8 37.2-8.5 52.2s-28.4 23.7-47 23.7H221.5l6.5 32H496c13.3 0 24 10.7 24 24s-10.7 24-24 24H200c-11.4 0-21.3-8-23.7-19.3L126.3 88.7l-20.1-42C103 41.2 86.9 32 69.5 32H24C10.7 32 0 21.3 0 8s10.7-8 24-8zM288 448a32 32 0 1 1 0-64 32 32 0 0 1 0 64zm-160 0a32 32 0 1 1 0-64 32 32 0 0 1 0 64z" />
                       </svg>
                     </span>
-                    <span className="text">Add to Cart</span>
                   </button>
                 </div>
               ))}
@@ -204,7 +201,7 @@ const MenStorePage = () => {
 
           <Footer />
         </>
-      )}
+      }
       <div
         className="bg-cover bg-center h-40 flex  transition-all duration-1000"
         style={{ backgroundImage: `url(${currentBgImg})`, color: "grey" }}

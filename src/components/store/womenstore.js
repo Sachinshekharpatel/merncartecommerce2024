@@ -5,12 +5,23 @@ import { useNavigate } from "react-router-dom";
 import "./menstorepage.css"; // Import the CSS file
 import womenBgImg from "./womenpagebg.avif";
 import womenBgImg2 from "./womenbg2.avif";
+import { useSelector } from "react-redux";
+import { arrayReduxBtn } from "../../reduxstore/reduxstore";
+import axios from "axios";
+import { useDispatch } from "react-redux";
 const WomenStore = () => {
   const [dataToDisplay, setDataToDisplay] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [currentBgImg, setCurrentBgImg] = useState(womenBgImg);
   const images = [womenBgImg, womenBgImg2];
-  const tokenMernKart = localStorage.getItem("tokenMernKart") || null;
+  
+  const cartItemarray = useSelector(
+    (state) => state.arrayStore.totalCartItemUser
+  );
+  const userEmail = localStorage.getItem("emailMernCart") || null;
+
+ 
 
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
@@ -55,13 +66,54 @@ const WomenStore = () => {
         console.error("Error fetching data:", error);
       });
   };
+  const addToCartBtnhandler = (item) => {
+    let data = {
+      ...item,
+      quantity: 1,
+      email: userEmail,
+    };
+
+    if (userEmail === null) {
+      dispatch(arrayReduxBtn.loginCheckerFun(true));
+      return;
+    } else {
+      try {
+        axios
+          .post(
+            `https://sachinstepsdatabase-default-rtdb.firebaseio.com/merncartItems.json`,
+            data
+          )
+          .then((res) => {
+            data = {
+              ...data,
+              id: res.data.name,
+            };
+            axios
+              .put(
+                `https://sachinstepsdatabase-default-rtdb.firebaseio.com/merncartItems/${data.id}.json`,
+                data
+              )
+              .then((res) => {
+                const data = [...cartItemarray, res.data];
+                console.log(data);
+                dispatch(arrayReduxBtn.totalCartItemFunction(data));
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div>
       <Header />
 
       <div
-         className="bg-cover bg-center h-40 flex  transition-all duration-1000"
+        className="bg-cover bg-center h-40 flex  transition-all duration-1000"
         style={{ backgroundImage: `url(${currentBgImg})`, color: "grey" }}
       >
         <button
@@ -115,7 +167,10 @@ const WomenStore = () => {
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p>${item.price}</p>
-              <button className="CartBtn">
+              <button
+                onClick={() => addToCartBtnhandler(item)}
+                className="CartBtn"
+              >
                 <span className="IconContainer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +182,6 @@ const WomenStore = () => {
                     <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path>
                   </svg>
                 </span>
-                <p className="text">Add to Cart</p>
               </button>
             </div>
           ))}
