@@ -1,14 +1,18 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
 const Footer = () => {
+  const [subscribeBtn, setsubscribeBtn] = useState(false);
   const emailRef = useRef();
   const subscribeBtnHandler = (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
     if (email.length > 3 && email.includes("@")) {
-      alert("Subscribed successfully");
+      setsubscribeBtn(true);
+      setTimeout(() => {
+        setsubscribeBtn(false);
+      }, 2000);
     }
 
     emailRef.current.value = "";
@@ -89,6 +93,19 @@ const Footer = () => {
           <p className="text-sm">&copy; Developed By Sachin Shekhar Patel.</p>
         </div>
       </div>
+      {subscribeBtn && (
+        <div
+          className="fixed top-4 right-4"
+          style={{
+            transition: "opacity 0.3s ease-in-out",
+            opacity: subscribeBtn ? 1 : 0, // Apply fade-out effect when itemAddedToCart is false
+          }}
+        >
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+            Subscribed
+          </button>
+        </div>
+      )}
     </footer>
   );
 };

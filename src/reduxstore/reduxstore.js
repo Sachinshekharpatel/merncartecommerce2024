@@ -2,6 +2,7 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 
 const initialState = {
   showLoginModal: false,
+  totalAmountOfCart :0,
   totalCartItemUser: [],
 };
 
@@ -11,11 +12,16 @@ const arrayStoreFunction = createSlice({
   reducers: {
     loginCheckerFun: (state, action) => {
       console.log(action.payload);
+      
       state.showLoginModal = action.payload;
     },
 
     totalCartItemFunction   : (state, action) => {
       state.totalCartItemUser = action.payload;
+    },
+
+    totalAmountCalculation : (state, action) => {
+      state.totalAmountOfCart = action.payload;
     },
   },
 });

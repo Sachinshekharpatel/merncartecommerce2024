@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { arrayReduxBtn } from "./reduxstore/reduxstore";
 import AboutusPage from "./components/aboutuspage/aboutus";
@@ -21,7 +21,7 @@ function App() {
   const cartItemarray = useSelector(
     (state) => state.arrayStore.totalCartItemUser
   );
-  
+
   useEffect(() => {
     axios
       .get(
@@ -34,7 +34,12 @@ function App() {
             return item;
           }
         });
+
+        const totalSum = userCart.reduce((acc, item) => {
+          return acc + item.price * item.quantity;
+        },0)
         console.log(userCart);
+        dispatch(arrayReduxBtn.totalAmountCalculation(totalSum));
         dispatch(arrayReduxBtn.totalCartItemFunction(userCart));
       });
   }, [cartItemarray.length]);
