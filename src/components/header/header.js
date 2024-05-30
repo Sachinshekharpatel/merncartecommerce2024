@@ -111,7 +111,11 @@ const Header = () => {
         <button className="bg-blue-500 text-white px-4 py-2 md:px-6 md:py-3 rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
           Search
         </button>
+        <button onClick={()=>{navigate("/recentorder")}} className="bg-pink-600 text-white px-4 py-2 md:px-6 md:py-3 rounded-r-md hover:bg-pink-500 focus:outline-none focus:ring focus:border-blue-300">
+           History
+        </button>
       </div>
+      
       <div className="flex items-center mt-4 ml-2 md:mt-0">
         <div className="button-container">
           <button onClick={() => navigate("/")} className="button">

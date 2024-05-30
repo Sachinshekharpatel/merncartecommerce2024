@@ -4,6 +4,7 @@ const initialState = {
   showLoginModal: false,
   totalAmountOfCart :0,
   totalCartItemUser: [],
+  orderHistory: [],
 };
 
 const arrayStoreFunction = createSlice({
@@ -19,9 +20,16 @@ const arrayStoreFunction = createSlice({
     totalCartItemFunction   : (state, action) => {
       state.totalCartItemUser = action.payload;
     },
+    removeItemHandlerFrondom : (state, action) => {
+      state.totalCartItemUser = [];
+    },
 
     totalAmountCalculation : (state, action) => {
       state.totalAmountOfCart = action.payload;
+    },
+
+    orderHandlerRemoveFromDom: (state, action) => {
+      state.orderHistory = action.payload;
     },
   },
 });

@@ -15,6 +15,8 @@ import SignupPage from "./components/signuppage/signuppage";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import CartPage from "./components/cartpage/cartpage";
+import RecentOrderPage from "./components/recent-order-history/recentorderpage";
+
 function App() {
   const dispatch = useDispatch();
   const emailMernCart = localStorage.getItem("emailMernCart");
@@ -64,6 +66,7 @@ function App() {
             path="/jewelerystore"
             element={<JeweleryStore></JeweleryStore>}
           ></Route>
+          <Route path="/recentOrder" element={<RecentOrderPage/>}></Route>
           <Route
             path="/electronicstore"
             element={<ElectronicStore></ElectronicStore>}

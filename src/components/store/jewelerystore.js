@@ -7,7 +7,7 @@ import menBgImg from "./mentshirtsection.jpg";
 import womenBgImg from "./womenpagebg.avif";
 import womenBgImg2 from "./womenbg2.avif";
 import axios from "axios";
-import { useDispatch ,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { arrayReduxBtn } from "../../reduxstore/reduxstore";
 const JeweleryStore = () => {
   const dispatch = useDispatch();
@@ -150,7 +150,7 @@ const JeweleryStore = () => {
       <div className="store-container">
         <div className="filter-container">
           <h2>Filters</h2>
-          {/* Add filter options here */}
+
           <div className="flex flex-col space-y-4">
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -179,7 +179,10 @@ const JeweleryStore = () => {
               <h3>{item.title}</h3>
               <p>{item.description}</p>
               <p>${item.price}</p>
-              <button onClick={() => addToCartBtnhandler(item)} className="CartBtn">
+              <button
+                onClick={() => addToCartBtnhandler(item)}
+                className="CartBtn"
+              >
                 <span className="IconContainer">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -193,7 +196,6 @@ const JeweleryStore = () => {
                 </span>
                 <p className="text">Add to Cart</p>
               </button>
-             
             </div>
           ))}
         </div>
@@ -205,14 +207,14 @@ const JeweleryStore = () => {
           </button>
         </div>
       )}
-      
+
       {showModalLogin && (
-            <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
-              <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
-                Please Login
-              </button>
-            </div>
-          )}
+        <div className="fixed top-4 right-4 transition-opacity duration-300 ease-in-out opacity-100">
+          <button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full">
+            Please Login
+          </button>
+        </div>
+      )}
       <Footer />
     </div>
   );

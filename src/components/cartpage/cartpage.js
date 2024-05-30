@@ -9,6 +9,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { arrayReduxBtn } from "../../reduxstore/reduxstore";
 const CartPage = () => {
+  const [loader, setLoader] = useState(false);
   const dispatch = useDispatch();
 
   const cartItem = useSelector((state) => state.arrayStore.totalCartItemUser);
@@ -35,6 +36,123 @@ const CartPage = () => {
         const updatedCart = cartItem.filter((res) => res.id !== item.id);
         dispatch(arrayReduxBtn.totalCartItemFunction(updatedCart));
       });
+  };
+
+  useEffect(() => {
+    console.log(loader);
+  }, [loader]);
+  const receipt_id = "qwsaq1";
+  const paymentInitiateHandler = async (e) => {
+    e.preventDefault();
+    console.log("inside paymentInitiateHandler");
+    setLoader(true);
+    try {
+      const response = await fetch(
+        "https://carrental2024backend.onrender.com/order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            amount: Math.floor(totalAmount) * 100,
+            currency: "INR",
+            receipt: receipt_id,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create Razorpay order");
+      }
+
+      const order = await response.json();
+      setLoader(false);
+      console.log(order);
+
+      const options = {
+        key: "rzp_test_WJBeJ4wZWRWu3i",
+        amount: order.amount,
+        currency: "INR",
+        name: "Mern Cart",
+        description: "Test Transaction",
+        image: cartImg,
+        order_id: order.id,
+        handler: async function (response) {
+          const body = { ...response };
+
+          const validateResponse = await fetch(
+            "https://carrental2024backend.onrender.com/order/validate",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(body),
+            }
+          );
+
+          const jsonRes = await validateResponse.json();
+          alert(`Payment Successful. Order ID: ${jsonRes.orderId}`);
+          navigate("/");
+          console.log(jsonRes);
+          console.log(cartItem);
+          try {
+            for (let i = 0; i < cartItem.length; i++) {
+              const data = {
+                ...cartItem[i],
+              };
+
+              axios.post(
+                `https://sachinstepsdatabase-default-rtdb.firebaseio.com/mernCartItemsHistory/.json`,
+                data
+              ).then((res)=>{
+                const data1 = {
+                  ...cartItem[i],
+                  id: res.data.name
+                };
+                axios.put(
+                  `https://sachinstepsdatabase-default-rtdb.firebaseio.com/mernCartItemsHistory/${res.data.name}.json`,
+                  data1
+                );  
+              })
+            }
+
+            for (let i = 0; i < cartItem.length; i++) {
+              axios.delete(
+                `https://sachinstepsdatabase-default-rtdb.firebaseio.com/merncartItems/${cartItem[i].id}.json`
+              );
+            }
+            dispatch(arrayReduxBtn.removeItemHandlerFrondom());
+            navigate("/");
+          } catch (error) {
+            console.log("not able to delete form the axios.realtime database");
+          }
+        },
+        prefill: {
+          name: "Sachin Shekhar",
+          email: "heroft7024@gmail.com",
+          contact: "6263877374",
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const rzp1 = new window.Razorpay(options);
+
+      rzp1.on("payment.failed", function (response) {
+        console.error(response.error);
+        alert(`Payment Failed: ${response.error.description}`);
+      });
+
+      rzp1.open();
+    } catch (error) {
+      console.error("Error initializing Razorpay payment:", error);
+    }
   };
 
   return (
@@ -102,7 +220,7 @@ const CartPage = () => {
                   </p>
                   <p className="font-bold text-gray-600">${item.price}</p>
                 </div>
-                
+
                 <button
                   onClick={() => {
                     removeItemHandler(item);
@@ -164,13 +282,18 @@ const CartPage = () => {
                 borderRadius: "5px",
                 borderRadius: "15px",
               }}
-              onClick={() => navigate("/payment")}
+              onClick={paymentInitiateHandler}
               className="proceedtopayment"
             >
               Proceed to Payment <span>{totalAmount}</span>
             </button>
           </div>
         </>
+      )}
+      {loader && (
+        <div className="loader">
+          <span> Payment Initialize Please wait ....</span>
+        </div>
       )}
       <Footer />
     </div>

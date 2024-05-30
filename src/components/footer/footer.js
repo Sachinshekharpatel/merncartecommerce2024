@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
+
 const Footer = () => {
   const [subscribeBtn, setsubscribeBtn] = useState(false);
   const emailRef = useRef();
@@ -32,6 +33,7 @@ const Footer = () => {
               >
                 <LinkedInIcon style={{ fontSize: "2.5rem" }} />
               </a>
+
               <a
                 href="mailto:heroft7024@gmail.com"
                 className="hover:text-gray-500 transition duration-300"
